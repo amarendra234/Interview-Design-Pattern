@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+// designing browser history using doubly linked list
+class Node{
+    public:
+          string url;
+          Node* next;
+          Node* pre;
+          Node(string _url){
+              url=_url;
+              next=NULL;
+              pre=NULL;
+          }
+
+};
+class browserHistory{
+          Node* curr;
+          public:
+          browserHistory(string homepage){
+              curr=new Node(homepage);
+          }
+          void visit_url(string url){
+              Node* temp=new Node(url);
+              curr->next=temp;
+              temp->pre=curr;
+              curr=curr->next;
+          }
+          void backword(){
+              if(curr!=NULL){
+                  Node* temp=curr->pre;
+                  curr=temp;
+              }
+          }
+          void forward(){
+              Node* temp=curr->next;
+              if(temp!=NULL){
+                  curr=temp;
+              }
+          }
+          void print(){
+              Node* temp=curr;
+               cout<<temp->url<<endl;
+          }
+};
+int main() {
+    browserHistory* b=new browserHistory("google");
+    b->visit_url("facebook");
+    b->visit_url("Insta");
+    b->visit_url("leetcode");
+    b->visit_url("linkdln");
+    b->print();
+    b->backword();
+    b->print();
+    b->backword();
+    b->print();
+    b->forward();
+    b->print();
+    b->visit_url("spoj");
+    
+}
