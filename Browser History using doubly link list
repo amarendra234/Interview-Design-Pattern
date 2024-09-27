@@ -58,3 +58,69 @@ int main() {
     b->visit_url("spoj");
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/****************************************************************************Leetcode solution**********************************************************************************
+class Node{
+     public:
+            string url;
+            Node* next;
+            Node* pre;
+            Node(string _url){
+                url=_url;
+                next=NULL;
+                pre=NULL;
+            }
+};
+class BrowserHistory {
+public:
+    Node* curr;
+    Node* hp;
+    BrowserHistory(string homepage) {
+        curr=new Node(homepage);
+        hp=curr;
+    }
+    
+    void visit(string url) {
+       Node* temp=new Node(url);
+        curr->next=temp;
+        temp->pre=curr;
+        curr=curr->next;
+        //cout<<curr->url<<endl;
+    }
+    
+    string back(int steps) {
+           while(steps-->0 &&  curr!=hp){
+            curr=curr->pre;
+        }
+        return curr->url;
+    }
+    
+    string forward(int steps) {
+        while(steps-->0 &&  curr->next!=NULL){
+            curr=curr->next;
+        }
+        return curr->url;
+    }
+};
+
+/**
+ * Your BrowserHistory object will be instantiated and called as such:
+ * BrowserHistory* obj = new BrowserHistory(homepage);
+ * obj->visit(url);
+ * string param_2 = obj->back(steps);
+ * string param_3 = obj->forward(steps);
+ */
