@@ -1,0 +1,98 @@
+class Node{
+   public:
+          int count;
+          Node* next;
+          Node* pre;
+          list<string>keys;
+          Node(int fre){
+            count=fre;
+            next=NULL;
+            pre=NULL;
+          }
+};
+class AllOne {
+public:
+    Node* head;
+    Node* tail;
+    unordered_map<string,Node*>umap;
+    AllOne() {
+        head=new Node(0);
+        head->keys.push_front("");
+        tail=new Node(0);
+        tail->keys.push_front("");
+        head->next=tail;
+        tail->pre=head;
+        umap.clear();
+    }
+    void addNode(Node* curr,int count){
+        Node* temp=new Node(count);
+        temp->next=curr->next;
+        curr->next->pre=temp;
+        curr->next=temp;
+        temp->pre=curr;
+    }
+    void deletNode(Node* curr){
+        curr->pre->next=curr->next;
+        curr->next->pre=curr->pre;
+    }
+    void inc(string key) {
+        if(umap.find(key)==umap.end()){
+            if(head->next==tail or head->next->count!=1){
+                addNode(head,1);   
+            }
+             head->next->keys.push_front(key);
+            umap[key]=head->next;
+        }else{
+            Node* currNode=umap[key];
+            int count=currNode->count;
+            if(currNode->next==tail or count+1!=currNode->next->count){
+                addNode(currNode,count+1);
+            }
+            currNode->keys.remove(key);
+            currNode->next->keys.push_front(key);
+            umap[key]=currNode->next;
+            if(currNode->keys.empty()){
+                deletNode(currNode);
+            }
+        }
+    }
+    
+    void dec(string key) {
+        Node* currNode=umap[key];
+            int count=currNode->count;
+            if(count==1){
+                umap.erase(key);
+            }else{
+            if(currNode->pre==head or count-1!=currNode->pre->count){
+                addNode(currNode->pre,count-1);
+            }
+            
+           
+            currNode->pre->keys.push_front(key);
+            umap[key]=currNode->pre;
+           
+             
+        }
+        currNode->keys.remove(key);
+         if(currNode->keys.empty()){
+                deletNode(currNode);
+            }
+    }
+    
+    string getMaxKey() {
+          return tail->pre->keys.front();
+    }
+    
+    string getMinKey() {
+          return head->next->keys.front();
+    }
+};
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne* obj = new AllOne();
+ * obj->inc(key);
+ * obj->dec(key);
+ * string param_3 = obj->getMaxKey();
+ * string param_4 = obj->getMinKey();
+ */
