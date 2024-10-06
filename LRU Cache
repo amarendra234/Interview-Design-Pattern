@@ -1,0 +1,73 @@
+class Node{
+      public:
+            int keys,value;
+            Node* next;
+            Node* pre;
+            Node(int _keys,int _value){
+                keys=_keys;
+                value=_value;
+                next=NULL;
+                pre=NULL;
+            }
+};
+class LRUCache {
+public:
+    Node* head;
+    Node* tail;
+    unordered_map<int,Node*>umap;
+    int len;
+    LRUCache(int capacity) {
+        head=new Node(-1,-1);
+        tail=new Node(-1,-1);
+        len=capacity;
+        head->next=tail;
+        tail->pre=head;
+    }
+    
+    int get(int key) {
+        if(umap.find(key)==umap.end()){
+            return -1;
+        }
+        Node* currnode=umap[key];
+        int ans=currnode->value;
+        int k=currnode->keys;
+        umap.erase(k);
+        removeNode(currnode);
+        addNode(k,ans);
+        umap[k]=tail->pre;
+        return ans;
+        
+    }
+    void addNode(int key,int val){
+        Node* temp=new Node(key,val);
+        tail->pre->next=temp;
+        temp->next=tail;
+        temp->pre=tail->pre;
+        tail->pre=temp;
+    }
+    void removeNode(Node* currNode){
+        currNode->pre->next=currNode->next;
+        currNode->next->pre=currNode->pre;
+    }
+    void put(int key, int value) {
+        if(umap.find(key)!=umap.end()){
+            removeNode(umap[key]);
+            umap.erase(key);
+        }
+        if(umap.size()>=len){
+            Node* leastnode=head->next;
+            int key_to_remove=leastnode->keys;
+            umap.erase(key_to_remove);
+            removeNode(leastnode);
+        }
+        addNode(key,value);// add node in last 
+        umap[key]=tail->pre;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
