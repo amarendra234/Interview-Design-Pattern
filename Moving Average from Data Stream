@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+class MovingAverage {
+public:
+    /*
+    * @param size: An integer
+    
+    */
+    long long int sum,pre_sum;
+    list<int>mylist;
+    long long len;
+    long long curr_len;
+    MovingAverage(int size) {
+        // do intialization if necessary
+        len=size;
+        sum=0;
+        curr_len=0;
+        pre_sum=0;
+    }
+
+    /*
+     * @param val: An integer
+     * @return:  
+     */
+    double next(int val) {
+        // write your code here
+        double  res;
+        if(curr_len<len){
+            mylist.push_back(val);
+            sum+=val;
+            curr_len++;
+            res=(sum*1.0)/(curr_len*1.0);
+        }else{
+            pre_sum+=mylist.front();
+            mylist.pop_front();
+            sum+=val;
+            long long int curr_sum=sum-pre_sum;
+            cout<<sum<<endl;
+            mylist.push_back(val);
+            res=(curr_sum*1.0)/(len*1.0);
+        }
+        return res;
+    }
+};
+
+/**
+ * Your MovingAverage object will be instantiated and called as such:
+ * MovingAverage obj = new MovingAverage(size);
+ * double param = obj.next(val);
+ */
