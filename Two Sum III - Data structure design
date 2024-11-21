@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+class TwoSum {
+public:
+    /**
+     * @param number: An integer
+     * @return: nothing
+     */
+     
+    unordered_map<int,int>umap;
+    void add(int number) {
+        // write your code here
+        umap[number]++;
+        
+    }
+
+    /**
+     * @param value: An integer
+     * @return: Find if there exists any pair of numbers which sum is equal to the value.
+     */
+    bool find(int value) {
+        // write your code here
+        for(auto nbr:umap){
+            int sum=value-nbr.first;
+            if(sum!=nbr.first and umap.find(sum)!=umap.end()){
+                return true;
+            }
+            if(sum==nbr.first and umap[sum]>=2){
+                return true;
+            }
+
+        }
+        return false;
+    }
+};
